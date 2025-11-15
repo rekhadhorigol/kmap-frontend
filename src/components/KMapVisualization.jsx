@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
+import { Card } from "../components/ui/card";
 
 function getGrayCode(num, bits) {
   return num ^ (num >> 1);
