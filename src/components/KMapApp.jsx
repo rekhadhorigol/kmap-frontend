@@ -4,8 +4,8 @@ import InputPanel from "./InputPanel";
 import KMapVisualization from "./KMapVisualization";
 import ResultsPanel from "./ResultsPanel";
 import VerilogPanel from "./VerilogPanel";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Button } from "../components/ui/button";
 import { Grid3x3, Binary, Code, Zap } from "lucide-react";
 import { toast } from "sonner";
 
