@@ -1,8 +1,10 @@
 import React from "react";
-import { Card } from "../components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Badge } from "../components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Table, Lightbulb, Binary } from "lucide-react";
+import LogicDiagram from "./LogicDiagram";
+
 
 export default function ResultsPanel({ results, varNames, numVars }) {
   return (
@@ -63,7 +65,7 @@ export default function ResultsPanel({ results, varNames, numVars }) {
 
       {/* Tabs */}
       <Tabs defaultValue="truth-table" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 bg-white/80 p-1 rounded-xl shadow-sm">
+        <TabsList className="grid w-full grid-cols-4 bg-white/80 p-1 rounded-xl shadow-sm">
 
           <TabsTrigger
             value="truth-table"
@@ -87,6 +89,14 @@ export default function ResultsPanel({ results, varNames, numVars }) {
           >
             <CheckCircle2 className="w-4 h-4 mr-2" />
             Steps
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="logic-diagram"
+            className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white rounded-lg"
+          >
+            <Lightbulb className="w-4 h-4 mr-2" />
+            Logic Diagram
           </TabsTrigger>
 
         </TabsList>
@@ -171,6 +181,18 @@ export default function ResultsPanel({ results, varNames, numVars }) {
           </Card>
         </TabsContent>
 
+        <TabsContent value="logic-diagram">
+          <Card className="bg-white rounded-xl shadow-md p-6">
+            <h3 className="text-xl font-semibold text-slate-800 mb-4">
+               Logic Diagram (from Minimal SOP)
+            </h3>
+
+            {/* Remove "F =" before passing */}
+            <LogicDiagram
+              sop={results.minimal_sop.replace(/^F\s*=\s*/i, "")}
+            />
+          </Card>
+        </TabsContent>
       </Tabs>
 
     </div>
