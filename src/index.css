@@ -113,3 +113,89 @@ code {
         border-bottom-color: inherit;
     }
 }
+
+/* Skip to content link for keyboard accessibility */
+.skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100]
+           focus:px-4 focus:py-2 focus:bg-emerald-600 focus:text-white focus:rounded-lg
+           focus:shadow-lg focus:outline-none;
+}
+
+/* Focus ring for all interactive elements */
+@layer components {
+    *:focus-visible {
+        @apply outline-2 outline-offset-2 outline-emerald-500;
+    }
+}
+
+/* Code blocks */
+.code-block {
+    @apply bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto text-sm
+           leading-relaxed font-mono whitespace-pre;
+    tab-size: 4;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 #1e293b;
+}
+
+.code-block::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+.code-block::-webkit-scrollbar-track {
+    @apply bg-slate-800 rounded;
+}
+
+.code-block::-webkit-scrollbar-thumb {
+    @apply bg-slate-600 rounded;
+}
+
+/* Scrollable truth table */
+.truth-table-wrapper {
+    max-height: 480px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+.truth-table-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.truth-table-wrapper::-webkit-scrollbar-track {
+    @apply bg-slate-100 rounded;
+}
+
+.truth-table-wrapper::-webkit-scrollbar-thumb {
+    @apply bg-slate-400 rounded;
+}
+
+.truth-table-wrapper thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Card hover effect */
+.card-hover {
+    @apply transition-shadow duration-200;
+}
+
+.card-hover:hover {
+    @apply shadow-xl;
+}
+
+/* Expression display with word wrap */
+.expression-text {
+    @apply font-mono font-bold break-all leading-relaxed;
+    word-break: break-word;
+}
+
+/* K-Map cell transitions */
+.kmap-cell {
+    @apply transition-all duration-150;
+}
+
+.kmap-cell:hover {
+    @apply scale-105 shadow-md z-10;
+}

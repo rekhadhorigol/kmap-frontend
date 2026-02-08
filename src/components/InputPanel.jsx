@@ -5,7 +5,8 @@ import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
-import { Calculator, Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Calculator, Loader2, Info } from "lucide-react";
 
 export default function InputPanel({
   numVars,
@@ -94,7 +95,7 @@ export default function InputPanel({
         <Label className="text-base font-semibold text-slate-700">
           Number of Variables
         </Label>
-        <RadioGroup
+        <Select
           value={numVars.toString()}
           onValueChange={(val) => {
             setNumVars(parseInt(val));
@@ -102,15 +103,27 @@ export default function InputPanel({
             setMaxterms([]);
             setDontCares([]);
           }}
-          className="flex flex-col gap-3"
         >
-          {[2, 3, 4].map((n) => (
-            <div key={n} className="flex items-center space-x-2">
-              <RadioGroupItem value={n.toString()} id={`var-${n}`} />
-              <Label htmlFor={`var-${n}`}>{n} Variables</Label>
-            </div>
-          ))}
-        </RadioGroup>
+          <SelectTrigger className="w-full border-emerald-300 focus:border-emerald-500">
+            <SelectValue placeholder="Select number of variables" />
+          </SelectTrigger>
+          <SelectContent>
+            {Array.from({ length: 14 }, (_, i) => i + 2).map((n) => (
+              <SelectItem key={n} value={n.toString()}>
+                {n} Variables {n > 4 && n <= 8 ? "(Standard)" : n > 8 ? "(Large - Optimized)" : ""}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {numVars > 8 && (
+          <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+            <Info className="w-4 h-4 mt-0.5 text-blue-600 flex-shrink-0" />
+            <p className="text-sm text-blue-700">
+              Using bit-slice optimization for {numVars} variables.
+              This handles up to {Math.pow(2, numVars).toLocaleString()} minterms efficiently.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Variable Names */}
@@ -118,19 +131,22 @@ export default function InputPanel({
         <Label className="text-base font-semibold text-slate-700">
           Variable Names
         </Label>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           {varNames.slice(0, numVars).map((name, idx) => (
-            <Input
-              key={idx}
-              type="text"
-              value={name}
-              onChange={(e) => {
-                const updated = [...varNames];
-                updated[idx] = e.target.value;
-                setVarNames(updated);
-              }}
-              className="input-field border-emerald-300 focus:border-emerald-500 w-24"
-            />
+            <div key={idx} className="flex flex-col gap-1">
+              <span className="text-xs text-slate-500">Var {idx}</span>
+              <Input
+                type="text"
+                value={name}
+                maxLength={4}
+                onChange={(e) => {
+                  const updated = [...varNames];
+                  updated[idx] = e.target.value.toUpperCase();
+                  setVarNames(updated);
+                }}
+                className="input-field border-emerald-300 focus:border-emerald-500 w-20 text-center"
+              />
+            </div>
           ))}
         </div>
       </div>

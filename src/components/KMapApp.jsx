@@ -19,7 +19,7 @@ export default function KMapApp() {
   const [maxterms, setMaxterms] = useState([]);
   const [dontCares, setDontCares] = useState([]);
   const [expression, setExpression] = useState("");
-  const [varNames, setVarNames] = useState(["A", "B", "C", "D"]);
+  const [varNames, setVarNames] = useState(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]);
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("input");
@@ -74,27 +74,34 @@ export default function KMapApp() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-teal-50">
+      {/* Skip to content */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-emerald-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white/80 backdrop-blur-md border-b border-emerald-200 sticky top-0 z-50 shadow-sm" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center" aria-hidden="true">
                 <Grid3x3 className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">
                   K-Map Minimizer
                 </h1>
-                <p className="text-sm text-slate-600 hidden sm:block">
+                <p className="text-sm text-slate-500 hidden sm:block">
+                  Bit-Slice Exact Minimizer &middot; 2&#8211;15 variables
                 </p>
               </div>
             </div>
             <Button
               onClick={handleReset}
               variant="outline"
-              className="border-emerald-300 hover:bg-emerald-50"
+              className="border-slate-300 hover:bg-slate-100 text-slate-700"
               data-testid="reset-button"
+              aria-label="Reset all inputs to default"
             >
               Reset
             </Button>
@@ -103,42 +110,42 @@ export default function KMapApp() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm p-1 rounded-xl shadow-sm">
+          <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm p-1.5 rounded-xl shadow-sm border border-slate-200" aria-label="K-Map sections">
             <TabsTrigger
               value="input"
-              className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white rounded-lg"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all"
               data-testid="tab-input"
             >
-              <Binary className="w-4 h-4 mr-2" />
+              <Binary className="w-4 h-4 mr-2" aria-hidden="true" />
               Input
             </TabsTrigger>
             <TabsTrigger
               value="kmap"
-              className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white rounded-lg"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all disabled:opacity-40"
               disabled={!results}
               data-testid="tab-kmap"
             >
-              <Grid3x3 className="w-4 h-4 mr-2" />
+              <Grid3x3 className="w-4 h-4 mr-2" aria-hidden="true" />
               K-Map
             </TabsTrigger>
             <TabsTrigger
               value="results"
-              className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white rounded-lg"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all disabled:opacity-40"
               disabled={!results}
               data-testid="tab-results"
             >
-              <Zap className="w-4 h-4 mr-2" />
+              <Zap className="w-4 h-4 mr-2" aria-hidden="true" />
               Results
             </TabsTrigger>
             <TabsTrigger
               value="verilog"
-              className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white rounded-lg"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all disabled:opacity-40"
               disabled={!results}
               data-testid="tab-verilog"
             >
-              <Code className="w-4 h-4 mr-2" />
+              <Code className="w-4 h-4 mr-2" aria-hidden="true" />
               Verilog
             </TabsTrigger>
           </TabsList>
@@ -198,8 +205,15 @@ export default function KMapApp() {
       <footer className="bg-white/80 backdrop-blur-md border-t border-emerald-200 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-slate-600">
-            K-Map Minimizer using Quine-McCluskey Algorithm | Built with FastAPI + React
+            K-Map Minimizer using Optimized Bit-Slice Quine-McCluskey with Branch-and-Bound | Built with FastAPI + React
           </p>
+          {results?.performance_metrics && (
+            <p className="text-center text-xs text-emerald-600 mt-2">
+              Last minimization: {results.performance_metrics.total_time_ms}ms
+              | {results.performance_metrics.num_prime_implicants} PIs
+              | {results.performance_metrics.num_selected_pis} selected
+            </p>
+          )}
         </div>
       </footer>
     </div>
